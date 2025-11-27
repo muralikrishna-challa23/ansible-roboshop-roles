@@ -1,0 +1,63 @@
+- name: create ec2 and r53 
+  hosts: local
+  connection: local
+  vars:
+   ami_id: "ami-09c813fb71547fc4f"
+   sg_id: "sg-070559652321741ba"
+   zone_id: "Z026855721W2V0QCE5DEE"
+   domain_name: "mkreddy.shop"
+   instance_type: "t3.micro"
+  #  instance:
+  #  - mongodb
+  #  - redis
+  #  - mysql
+  #  - rabbitmq
+  tasks:
+  - name: create ec2 instance
+    amazon.aws.ec2_instance:
+     name: "{{ item }}"
+     instance_type: "{{ instance_type }}"
+     security_group: "{{ sg_id }}"
+     image_id: "{{ ami_id }}"
+     tags:
+      name: "{{ item }}"
+    loop: "{{ instance }}"
+    register: ec2_output
+
+  # - name: output of ec2
+  #   ansible.builtin.debug:
+  #    msg: "{{ ec2_output }}"
+
+  # - name: public_ip_address
+  #   ansible.builtin.debug:
+  #    msg: "public_ip_address is: {{ item.instances[0].public_ip_address }}"
+  #   loop: "{{ ec2_output.results }}"
+
+  # - name: private_ip_address
+  #   ansible.builtin.debug:
+  #    msg: "private_ip_address is: {{ item.instances[0].private_ip_address }}"
+  #   loop: "{{ ec2_output.results }}"
+
+  - name: create r53 record
+    amazon.aws.route53:
+      zone: "{{ domain_name }}"
+      record: "{{ item.item}}.{{ domain_name }}"
+      type: A
+      value: "{{ item.instances[0].private_ip_address }}"
+      state: present
+      ttl: 1
+      overwrite: true
+    when:  item.item  != "frontend"
+    loop: "{{ ec2_output.results }}"
+
+  - name: create r53 record for frontend
+    amazon.aws.route53:
+      zone: "{{ domain_name }}"
+      record: "{{ domain_name }}"
+      type: A
+      value: "{{ item.instances[0].public_ip_address }}"
+      state: present
+      ttl: 1
+      overwrite: true
+    when:  item.item  == "frontend"
+    loop: "{{ ec2_output.results }}"

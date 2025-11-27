@@ -1,5 +1,0 @@
-- name: mondb setup
-  hosts: mongodb
-  become: yes
-  roles:
-  - mongodb
