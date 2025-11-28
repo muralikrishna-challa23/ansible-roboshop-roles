@@ -1,3 +1,10 @@
+- name: import vs include with tags
+  ansible.builtin.include_role:
+   name: common
+   tasks_from: import-include.yaml
+  tags:
+  - test
+
 - name: import vs include
   ansible.builtin.include_role:
    name: common
