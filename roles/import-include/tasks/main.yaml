@@ -1,7 +1,4 @@
-- name: import vs include debug
-  ansible.builtin.debug:
-   msg: "Hi"
-
-- name: import vs include debug again
-ansible.builtin.debug:
-   msg: "Hello"
+- name: import vs include
+  ansible.builtin.include_role:
+   name: common
+   tasks_from: import-include.yaml
