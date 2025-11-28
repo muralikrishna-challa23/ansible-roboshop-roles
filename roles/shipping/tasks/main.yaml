@@ -9,6 +9,14 @@
    name: common
    tasks_from: java.yaml
 
+- name: install python
+  ansible.builtin.pip:
+    executable: pip3.9
+    name: "{{item}}"
+  loop:
+  - cryptography
+  - pymysql
+
 - name: mysql data load
   community.mysql.mysql_db:
   state: import
