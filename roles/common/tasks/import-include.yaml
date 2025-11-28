@@ -2,7 +2,9 @@
 - name: import vs include debug
   ansible.builtin.debug:
    msg: "Hi"
-
+  tags:
+  - test
+  
 - name: import vs include debug again
   ansible.builtin.debug:
    msg: "Hello"
