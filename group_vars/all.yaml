@@ -1,0 +1,10 @@
+MONGODB_HOST: mongodb.mkreddy.shop
+REDIS_HOST: redis.mkreddy.shop
+MYSQL_HOST: mysql.mkreddy.shop
+RABBITMQ_HOST: rabbitmq.mkreddy.shop
+CATALOGUE_HOST: catalogue.mkreddy.shop
+USER_HOST: user.mkreddy.shop
+CART_HOST: cart.mkreddy.shop
+SHIPPING_HOST: shipping.mkreddy.shop
+PAYMENT_HOST: payment.mkreddy.shop
+FRONTEND_HOST: frontend.mkreddy.shop
