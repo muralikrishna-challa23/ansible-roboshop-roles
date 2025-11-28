@@ -1,0 +1,28 @@
+
+- name: import role app setup
+  ansible.builtin.import_role:
+   name: common
+   tasks_from: app-setup.yaml
+
+- name: import role java setup
+  ansible.builtin.import_role:
+   name: common
+   tasks_from: java.yaml
+
+- name: mysql data load
+  community.mysql.mysql_db:
+  state: import
+  name: all
+  login_host: mysql.mkreddy.shop
+  login_user: root
+  login_password: RoboShop@1
+  target: "{{ item }}"
+  loop:
+  - /app/db/schema.sql
+  - /app/db/app-user.sql
+  - /app/db/master-data.sql
+
+- name: import role system setup
+  ansible.builtin.import_role:
+   name: common
+   tasks_from: system-setup.yaml
